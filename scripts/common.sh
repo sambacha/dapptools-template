@@ -108,17 +108,17 @@ estimate_gas() {
     # estimate gas
     GAS=$(seth estimate --create $BYTECODE $SIG $ARGS --rpc-url $ETH_RPC_URL)
 
-    GASNOW_RESPONSE=$(curl -s https://www.gasnow.org/api/v3/gas/price)
+    GASNOW_RESPONSE=$(curl -sL https://etherchain.org/api/gasnow)
     response=$(jq '.code' <<< $GASNOW_RESPONSE)
     if [[ $response != "200" ]]; then
-      echo "Could not get gas information from ${TPUT_BOLD}gasnow.org${TPUT_RESET}: https://www.gasnow.org"
+      echo "Could not get gas information from ${TPUT_BOLD}etherchain.org${TPUT_RESET}: https://etherchain.org/api/gasnow"
       echo "response code: $response"
    else
      rapid=$(( $(jq '.data.rapid' <<< $GASNOW_RESPONSE) / 1000000000 ))
      fast=$(( $(jq '.data.fast' <<< $GASNOW_RESPONSE) / 1000000000 ))
      standard=$(( $(jq '.data.standard' <<< $GASNOW_RESPONSE) / 1000000000 ))
      slow=$(( $(jq '.data.slow' <<< $GASNOW_RESPONSE) / 1000000000 ))
-     echo "Gas prices from ${TPUT_BOLD}gasnow.org${TPUT_RESET}: https://www.gasnow.org"
+     echo "Gas prices from ${TPUT_BOLD}etherchain.org${TPUT_RESET}: https://etherchain.org/api/gasnow"
      echo " \
      ${TPUT_RED}Rapid: $rapid gwei ${TPUT_RESET} \n
      ${TPUT_YELLOW}Fast: $fast gwei \n
